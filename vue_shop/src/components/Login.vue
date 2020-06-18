@@ -32,7 +32,7 @@
 export default {
     data(){
         return{
-            //这是登录表单的绑定对象
+            //这是登录表单的绑定对象,要和数据库进行匹配
             loginForm:{
                 username:'czy',
                 password:'123456'
