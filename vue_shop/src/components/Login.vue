@@ -7,19 +7,19 @@
             <!-- 注册区域 -->
             <div>
                 <!-- 用户密码 -->
-                <el-form :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_message">
+                <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_message">
                     <!-- 用户 -->
-                    <el-form-item prop="userName">
-                        <el-input v-model="loginForm.userName" prefix-icon="iconfont icon-user"></el-input>
+                    <el-form-item prop="username">
+                        <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
                     </el-form-item>
                     <!-- 密码 -->
-                    <el-form-item >
-                        <el-input v-model="loginForm.passWord" prefix-icon="iconfont icon-3702mima" type="password"></el-input>
+                    <el-form-item prop="password">
+                        <el-input v-model="loginForm.password" prefix-icon="iconfont icon-3702mima" type="password"></el-input>
                     </el-form-item>
                     <!-- 按钮区域 -->
                     <el-form-item class="btns">
-                        <el-button type="primary" round>登录</el-button>
-                        <el-button type="info" round>重置</el-button>
+                        <el-button type="primary" round @click="login">登录</el-button>
+                        <el-button type="info" round @click="loginReset">重置</el-button>
                     </el-form-item>
                 </el-form>
 
@@ -34,22 +34,58 @@ export default {
         return{
             //这是登录表单的绑定对象
             loginForm:{
-                userName:'czy',
-                passWord:'123'
+                username:'czy',
+                password:'123456'
             },
             //验证表单的规则
             loginFormRules:{
                 //验证用户名是否合法
-                userName:[
+                username:[
                     { required: true, message: '请输入登录名称', trigger: 'blur' },
                     { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
                 ],
-                passWord:[
-
+                password:[
+                    { required: true, message: '请输入密码', trigger: 'blur' }
                 ]
             }
 
         }
+    },
+    methods:{
+        //点击重置按钮
+      loginReset(){
+        //   console.log(this);
+        this.$refs.loginFormRef.resetFields();
+      },
+      //登录
+      login(){
+        //登录前的验证
+        this.$refs.loginFormRef.validate((async vaild => {
+            console.log(vaild)
+            if(vaild = false){
+                return;
+            }
+            const {data:res} =await this.$http.post("login",this.loginForm);
+            console.log(res.meta.status);
+            if(res.meta.status != 200){
+                //alert("错误");
+                return this.$message.error("登录错误");
+            }
+            this.$message({
+                showClose: true,
+                message: '登录成功',
+                type: 'success'
+            });
+            //console.log(res);
+            //1.将登录成功之后的token，保存到客户端的sessionStorage
+            //  1.1项目中除了登录之外的其他api接口，必须在登录后才可以访问
+            //  1.2token只应该在当前网站打开期间生效，所以将token保存在sessionStorage中
+            window.sessionStorage.setItem("token",res.data.token);
+            this.$router.push("/home");
+
+        }));
+      }
+       
     }
     
 }
