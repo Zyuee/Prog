@@ -5,7 +5,9 @@
         <el-header>
             <div>
                 <img src="../assets/heima.png" alt="">
-                <span>XX平台管理系统</span>
+                <span>                    
+                    <router-link class="topName" to="/">XX平台管理系统</router-link>
+                </span>
             </div>
             <el-button type="info" @click="logout">登出</el-button>
         </el-header>
@@ -80,7 +82,7 @@ export default {
             const {data:res} = await this.$http.get('menus');
             if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
             this.menuList = res.data
-            console.log(res);
+            //console.log(res);
         },
         toggleCollapse(){
             this.isCollapse = !this.isCollapse
@@ -134,6 +136,9 @@ export default {
     text-align: center;//内容的左右居中
     letter-spacing: 0.2em;//字母之间的距离
     cursor: pointer;
-
+}
+.topName{
+    color: azure;
+    text-decoration: none;
 }
 </style>
