@@ -19,7 +19,11 @@ import {Switch} from 'element-ui'
 import {Tooltip} from 'element-ui'
 //页码
 import {Pagination} from 'element-ui'
+import {Dialog} from 'element-ui'
+//messageBox挂载，confirm函数特殊
+import { MessageBox } from 'element-ui';
 
+ 
 
 
 Vue.use(Button)
@@ -44,6 +48,9 @@ Vue.use(TableColumn)
 Vue.use(Switch)
 Vue.use(Tooltip)
 Vue.use(Pagination)
+Vue.use(Dialog)
 
 //message比较特殊
 Vue.prototype.$message = Message
+//messageBox特殊
+Vue.prototype.$confirm = MessageBox.confirm
